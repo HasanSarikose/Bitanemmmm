@@ -4,85 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seni Çok Seviyorum!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #fff5f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Pembe ve lila yumuşak geçişli arka plan */
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            font-family: 'Quicksand', sans-serif;
             overflow: hidden;
-            text-align: center;
+            position: relative;
         }
 
-        .container {
-            z-index: 1;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            z-index: 10;
+            max-width: 80%;
+            border: 2px solid #fff;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Kartın hafifçe aşağı yukarı sallanma efekti */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         h1 {
+            font-family: 'Dancing Script', cursive;
             color: #d63384;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 3rem;
+            margin-bottom: 20px;
         }
 
         p {
-            color: #555;
-            font-size: 1.2rem;
+            color: #7d5a5a;
+            font-size: 1.3rem;
             line-height: 1.6;
+            margin-bottom: 20px;
         }
 
-        .heart {
-            position: absolute;
+        .heart-icon {
             color: #ff4d6d;
-            font-size: 20px;
-            user-select: none;
-            animation: move linear infinite;
-        }
-
-        @keyframes move {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-
-        .flowers {
             font-size: 50px;
-            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* Arka plandaki uçan kalplerin stili */
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) scale(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(110vh) scale(1.5); opacity: 0; }
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            color: #ff758f;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="flowers">🌸🌷🌹</div>
+    <div class="card">
+        <div class="heart-icon">❤️</div>
         <h1>İyi Ki Varsın Sevgilim!</h1>
-        <p>Seni çok ama çok seviyorum.<br>
-        Hayatımdaki en güzel şeysin.<br>
-        <strong>Sevgililer Günümüz Kutlu Olsun!</strong></p>
-        <div class="flowers">✨💖✨</div>
+        <p>Dünyanın en şanslı insanıyım çünkü yanımda sen varsın. <br> 
+           Gülüşün, sevgin ve varlığın benim için her şeyden değerli.</p>
+        <p class="footer-text">Seni Çok Seviyorum... 🌹</p>
     </div>
 
     <script>
+        // Sürekli yeni kalp oluşturma fonksiyonu
         function createHeart() {
             const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.classList.add('floating-heart');
+            
+            // Rastgele emoji seçimi (farklı çiçek ve kalpler)
+            const icons = ['❤️', '💖', '🌸', '🌹', '✨', '💕'];
+            heart.innerText = icons[Math.floor(Math.random() * icons.length)];
+            
+            // Rastgele konum ve hız
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (Math.random() * 3 + 3) + "s"; 
+            heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+            
             document.body.appendChild(heart);
 
+            // Ekrandan çıkan kalpleri temizle
             setTimeout(() => {
                 heart.remove();
-            }, 5000);
+            }, 6000);
         }
 
+        // Her 300 milisaniyede bir yeni kalp fırlat
         setInterval(createHeart, 300);
     </script>
 </body>
