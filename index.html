@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seni Çok Seviyorum!</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    
     <style>
         body {
             margin: 0;
@@ -13,67 +15,72 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite; /* Hareketli arka plan */
             font-family: 'Quicksand', sans-serif;
-            overflow-x: hidden;
-            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            background: rgba(255, 255, 255, 0.2); /* Cam efekti */
+            backdrop-filter: blur(15px); /* Arkayı bulanıklaştırır */
+            -webkit-backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             text-align: center;
             z-index: 10;
-            max-width: 350px; /* Mobil uyumlu genişlik */
-            width: 90%;
-            border: 2px solid #fff;
-            animation: float 3s ease-in-out infinite;
+            max-width: 400px;
+            width: 85%;
+            color: white;
         }
 
-        /* Fotoğraf Stili */
         .couple-photo {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%; /* Yuvarlak yapar */
-            object-fit: cover; /* Fotoğrafı kutuya sığdırır */
-            border: 5px solid #ff758f;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
             margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            color: #d63384;
-            font-size: 2.5rem;
-            margin: 10px 0;
+            font-size: 2.8rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        p {
-            color: #7d5a5a;
-            font-size: 1.1rem;
-            line-height: 1.5;
+        #typewriter {
+            font-size: 1.2rem;
+            height: 50px; /* Yazı değişirken zıplamasın diye */
+            margin: 20px 0;
         }
 
-        .floating-heart {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.8);
-            user-select: none;
-            pointer-events: none;
-            z-index: 1;
-            animation: fall linear forwards;
+        .music-btn {
+            background: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            color: #e73c7e;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
         }
 
-        @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px white;
         }
     </style>
 </head>
@@ -81,25 +88,78 @@
 
     <div class="card">
         <img src="biz.jpg" alt="Biz" class="couple-photo">
+        <h1>Seni Seviyorum!</h1>
         
-        <h1>İyi Ki Varsın!</h1>
-        <p>Hayatıma kattığın tüm güzellikler için teşekkür ederim. Seni her gün daha çok seviyorum. ❤️</p>
-        <p style="color: #ff4d6d; font-weight: bold;">Sonsuza dek... 🌹</p>
+        <div id="typewriter"></div>
+
+        <button class="music-btn" onclick="celebrate()">Sürprizi Patlat! 🎉</button>
+        
+        <audio id="bgMusic" loop>
+            <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+        </audio>
     </div>
 
     <script>
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('floating-heart');
-            const icons = ['❤️', '💖', '🌸', '🌹', '✨', '💕'];
-            heart.innerText = icons[Math.floor(Math.random() * icons.length)];
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = (Math.random() * 3 + 3) + "s"; 
-            heart.style.fontSize = (Math.random() * 15 + 15) + "px";
-            document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 6000);
+        // 1. Daktilo Efekti
+        const textElement = document.getElementById('typewriter');
+        const phrases = [
+            "Hayatımdaki en güzel şeysin...",
+            "İyi ki varsın sevgilim!",
+            "Her anımız bir masal gibi...",
+            "Sevgililer günümüz kutlu olsun! ❤️"
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+
+        function type() {
+            if (charIndex < phrases[phraseIndex].length) {
+                textElement.innerHTML += phrases[phraseIndex].charAt(charIndex);
+                charIndex++;
+                setTimeout(type, 100);
+            } else {
+                setTimeout(erase, 2000);
+            }
         }
-        setInterval(createHeart, 300);
+
+        function erase() {
+            if (charIndex > 0) {
+                textElement.innerHTML = phrases[phraseIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, 50);
+            } else {
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                setTimeout(type, 500);
+            }
+        }
+
+        window.onload = type;
+
+        // 2. Konfeti ve Müzik Başlatma
+        function celebrate() {
+            const audio = document.getElementById('bgMusic');
+            audio.play();
+
+            // Renkli kalpler patlat
+            var duration = 5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+
+              var particleCount = 50 * (timeLeft / duration);
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
     </script>
 </body>
 </html>
