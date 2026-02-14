@@ -9,30 +9,40 @@
         body {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Pembe ve lila yumuşak geçişli arka plan */
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             font-family: 'Quicksand', sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             text-align: center;
             z-index: 10;
-            max-width: 80%;
+            max-width: 350px; /* Mobil uyumlu genişlik */
+            width: 90%;
             border: 2px solid #fff;
             animation: float 3s ease-in-out infinite;
         }
 
-        /* Kartın hafifçe aşağı yukarı sallanma efekti */
+        /* Fotoğraf Stili */
+        .couple-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%; /* Yuvarlak yapar */
+            object-fit: cover; /* Fotoğrafı kutuya sığdırır */
+            border: 5px solid #ff758f;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
@@ -41,27 +51,19 @@
         h1 {
             font-family: 'Dancing Script', cursive;
             color: #d63384;
-            font-size: 3rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin: 10px 0;
         }
 
         p {
             color: #7d5a5a;
-            font-size: 1.3rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.5;
         }
 
-        .heart-icon {
-            color: #ff4d6d;
-            font-size: 50px;
-            margin-bottom: 10px;
-        }
-
-        /* Arka plandaki uçan kalplerin stili */
         .floating-heart {
             position: absolute;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.8);
             user-select: none;
             pointer-events: none;
             z-index: 1;
@@ -69,52 +71,34 @@
         }
 
         @keyframes fall {
-            0% { transform: translateY(-10vh) scale(0); opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { transform: translateY(110vh) scale(1.5); opacity: 0; }
-        }
-
-        .footer-text {
-            font-size: 0.9rem;
-            color: #ff758f;
-            font-weight: bold;
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div class="heart-icon">❤️</div>
-        <h1>İyi Ki Varsın Sevgilim!</h1>
-        <p>Dünyanın en şanslı insanıyım çünkü yanımda sen varsın. <br> 
-           Gülüşün, sevgin ve varlığın benim için her şeyden değerli.</p>
-        <p class="footer-text">Seni Çok Seviyorum... 🌹</p>
+        <img src="biz.jpg" alt="Biz" class="couple-photo">
+        
+        <h1>İyi Ki Varsın!</h1>
+        <p>Hayatıma kattığın tüm güzellikler için teşekkür ederim. Seni her gün daha çok seviyorum. ❤️</p>
+        <p style="color: #ff4d6d; font-weight: bold;">Sonsuza dek... 🌹</p>
     </div>
 
     <script>
-        // Sürekli yeni kalp oluşturma fonksiyonu
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('floating-heart');
-            
-            // Rastgele emoji seçimi (farklı çiçek ve kalpler)
             const icons = ['❤️', '💖', '🌸', '🌹', '✨', '💕'];
             heart.innerText = icons[Math.floor(Math.random() * icons.length)];
-            
-            // Rastgele konum ve hız
             heart.style.left = Math.random() * 100 + "vw";
             heart.style.animationDuration = (Math.random() * 3 + 3) + "s"; 
-            heart.style.fontSize = (Math.random() * 20 + 15) + "px";
-            
+            heart.style.fontSize = (Math.random() * 15 + 15) + "px";
             document.body.appendChild(heart);
-
-            // Ekrandan çıkan kalpleri temizle
-            setTimeout(() => {
-                heart.remove();
-            }, 6000);
+            setTimeout(() => { heart.remove(); }, 6000);
         }
-
-        // Her 300 milisaniyede bir yeni kalp fırlat
         setInterval(createHeart, 300);
     </script>
 </body>
